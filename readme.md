@@ -92,3 +92,11 @@ Controllers and routers should not be changed.
 
 ### CI/CD
 #TODO Add description
+
+
+### Generate OpenAPI spec
+    ```
+    set ENVIRONMENT=local
+    set PYTHONPATH=./app
+    python extract_openapi.py
+    ```

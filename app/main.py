@@ -14,6 +14,7 @@ def main():
     title = f"{config.env} - {config.service_name}"
 
     app = FastAPI(title=config.service_name, description=config.description, version=config.short_sha, debug=True)
+
     
     ##### ----- Logging setup ------ #####
     app_logger = setup_logging()

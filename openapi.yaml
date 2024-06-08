@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: products
+  description: The Products microservice is a self-contained service responsible for
+    managing product data within a larger application. It provides functionalities
+    to create, retrieve, update, and delete product information.
+  version: local-sha
+paths:
+  /health/products:
+    get:
+      tags:
+      - health
+      summary: Health Check
+      operationId: health_check_health_products_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /public/v1/products:
+    post:
+      tags:
+      - Product
+      summary: Create a new product
+      description: Creates a new product in the system
+      operationId: CREATE_PRODUCT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PostSchemaProductIn'
+              title: Product Input
+              description: The product content
+        required: true
+      responses:
+        '201':
+          description: Object Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostSchemaProductOut'
+        '202':
+          description: Object updated
+          content:
+            application/json: {}
+        '400':
+          description: The server cannot or will not process the request due to something
+            that is perceived to be a client error
+          content:
+            application/json: {}
+        '401':
+          description: Unauthorized. Ensure you are using a valid JWT token.
+          content:
+            application/json: {}
+        '403':
+          description: Credential error. Ensure you are using a valid JWT token.
+          content:
+            application/json: {}
+        '422':
+          description: Check parameter values correctness in according to the documentation
+            above.
+          content:
+            application/json: {}
+        '500':
+          description: Internal server error. Please contact the support team.
+          content:
+            application/json: {}
+        '503':
+          description: Service is not currently available. Try again later or contact
+            the support team.
+          content:
+            application/json: {}
+components:
+  schemas:
+    PostSchemaProductIn:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        category_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category Id
+        brand_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand Id
+        price:
+          type: number
+          title: Price
+        weight:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Weight
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - description
+      - price
+      title: PostSchemaProductIn
+      examples:
+      - brand_id: 1c1a8ef9-7dab-4397-b73a-5f9a4143c135
+        category_id: 7e96755c-88a3-4f3d-9f59-4d3ab3b277ee
+        description: This is a high-quality, comfortable T-Shirt
+        name: Amazing T-Shirt
+        price: 19.99
+        weight: 0.25
+    PostSchemaProductOut:
+      properties:
+        product_id:
+          type: string
+          title: Product Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      additionalProperties: false
+      type: object
+      required:
+      - product_id
+      - created_at
+      title: PostSchemaProductOut
+      examples:
+      - created_at: '2024-06-08T17:40:00Z'
+        product_id: 1caff255-ef44-4066-a7a3-884c81c34ecf

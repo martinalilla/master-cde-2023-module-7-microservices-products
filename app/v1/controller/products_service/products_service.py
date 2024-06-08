@@ -3,7 +3,6 @@ from v1.config.config import Settings, get_config
 from v1.controller.base_service import BaseService
 from v1.dao.products_dao.products_dao import ProductsDAO
 from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut
-from opentelemetry import trace
 
 _config: Settings = get_config()
 
