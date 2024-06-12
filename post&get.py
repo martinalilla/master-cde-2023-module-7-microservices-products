@@ -11,8 +11,10 @@ from botocore.exceptions import ClientError
 
 app = FastAPI()
 
+products = []
+
 # Initialize DynamoDB resource (no endpoint_url for AWS)
-dynamodb = boto3.resource('dynamodb', region_name='YOUR_AWS_REGION')
+dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
 
 # Define the Product model
 class Product(BaseModel):
