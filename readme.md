@@ -9,18 +9,45 @@ Chosen approach: Release Branching (one branch for development, one branch for t
 ### To Start
 - If you are working in VisualStudio Code, create a launch.json file with the following content:
 ```
-    {
+{
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Microservice Development",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/run.py",
             "env": {
-                // adjust pythonpath for local module 
+                // adjust pythonpath for local module
                 "PYTHONPATH": "${workspaceFolder}/app"
             },
+            "envFile": "${workspaceFolder}/.env.development",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Microservice Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run.py",
+            "env": {
+                // adjust pythonpath for local module
+                "PYTHONPATH": "${workspaceFolder}/app"
+            },
+            "envFile": "${workspaceFolder}/.env.test",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Microservice Production",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run.py",
+            "env": {
+                // adjust pythonpath for local module
+                "PYTHONPATH": "${workspaceFolder}/app"
+            },
+            "envFile": "${workspaceFolder}/.env.production",
             "console": "integratedTerminal",
             "justMyCode": false
         }
@@ -31,7 +58,7 @@ Chosen approach: Release Branching (one branch for development, one branch for t
     1. Setup a virtual environment
     Set up a virtual environment (optional but recommended), named venv to isolate your project dependencies.
     ```
-    python -m venv --copies venv
+    python -m venv --copies .venv
     ```
 
     2. Activate the virtual environment
