@@ -18,6 +18,7 @@ class Repository:
             subcollection_name: str = None
     ):
         self.db = get_dynamodb_client().db
+        self.table = self.db.dynamodb.Table('MCDE2023-d-products') #TODO env variable
         self.collection_name = collection_name
         self.subcollection_name = subcollection_name
 
@@ -25,7 +26,7 @@ class Repository:
     def _create(self, id: str, data: Generic[T]):
         logger.info("Creates a document in DynamoDB")
         try:
-            #TODO Use the AWS SDK for Python (Boto3) with DynamoDB to implement creation logic
+            self.table.put_item(data) #TODO add typing
             logger.debug(f"Created document (ID: {id})")
             return
         except HttpCustomException:
