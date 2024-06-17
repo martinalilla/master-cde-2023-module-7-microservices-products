@@ -33,3 +33,17 @@ class PostSchemaProductOut(BaseModel):
             "examples": [CREATE_PRODUCT.output.example]
         }
     )
+
+class UpdateSchemaProductIn(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    category_id: Optional[str] = None
+    brand_id: Optional[str] = None
+    price: Optional[float] = None
+    weight: Optional[float] = None
+    updated_at: Optional[datetime] = None 
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="forbid", 
+    )
