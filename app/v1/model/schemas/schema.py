@@ -50,6 +50,6 @@ class GetSchemaProductOut(BaseModel):
     from_attributes=True,
     extra="forbid",       # Forbid additional generic key-value pairs in support
     json_schema_extra={
-      "examples": [GET_PRODUCT.output.example]
+      "examples": [GET_PRODUCT.input.example]
     }
   )
