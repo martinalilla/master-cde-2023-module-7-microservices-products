@@ -1,6 +1,6 @@
 import logging
 from v1.config.config import Settings, get_config
-from v1.model.db_schemas.db_schema import ProductEssential
+from v1.model.db_schemas.db_schema import Product, ProductEssential
 from v1.model.repository.repository import Repository
 from v1.utils.exception import HttpCustomException, custom_exception_handler
 
@@ -19,7 +19,7 @@ class ProductsRepository(Repository):
             subcollection_name = subcollection_name,
         )
 
-    def create_product(self, product_id: str, data: ProductEssential):
+    def create_product(self, product_id: str, data: Product):
         logger.info("Creates a Product document in Firestore")
         try:
             self._create(product_id, data)
@@ -28,3 +28,7 @@ class ProductsRepository(Repository):
             raise
         except Exception:
             exception_handler.handle_custom_exception(f"An error occurred creating product document (ID: {product_id})")
+
+
+def get_repository() -> ProductsRepository:
+    return ProductsRepository()

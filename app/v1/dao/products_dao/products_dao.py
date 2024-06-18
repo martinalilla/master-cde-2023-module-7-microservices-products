@@ -2,9 +2,10 @@ import logging
 import uuid
 from fastapi import Depends
 from v1.config.config import Settings, get_config
+from v1.model.db_schemas.db_schema import Product
 from v1.model.repository.products_repository.products_repository import ProductsRepository
-from v1.model.repository.repository import get_repository
-from v1.model.schemas.schema import PostSchemaProductDB, PostSchemaProductIn, PostSchemaProductOut
+from v1.model.repository.products_repository.products_repository import get_repository
+from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut
 from v1.utils.exception import HttpCustomException, custom_exception_handler
 from datetime import datetime
 
@@ -24,9 +25,9 @@ class ProductsDAO:
         logger.info("Creates a new product for a user")
         try:
             product_id = str(uuid.uuid4())
-            created_at = datetime.now()
+            created_at = datetime.now().isoformat()
 
-            product = PostSchemaProductDB(
+            product = Product(
                 **product_in.model_dump(),
                 product_id=product_id,
                 created_at=created_at

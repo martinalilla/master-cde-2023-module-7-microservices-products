@@ -22,13 +22,9 @@ class PostSchemaProductIn(BaseModel):
         }
     )
 
-class PostSchemaProductDB(PostSchemaProductIn):
-    product_id: str
-    created_at: datetime
-
 class PostSchemaProductOut(BaseModel):
     product_id:  str                        # Unique identifier for the product
-    created_at:  datetime                   # Date and time the product was created
+    created_at:  str                  # Date and time the product was created
 
     model_config = ConfigDict(
         from_attributes=True,
