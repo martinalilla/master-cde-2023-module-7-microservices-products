@@ -1,8 +1,10 @@
 import logging
 from v1.config.config import Settings, get_config
 from v1.model.db_schemas.db_schema import Product, ProductEssential
-from v1.model.repository.repository import Repository
+from v1.model.repository.repository import Repository, Condition
 from v1.utils.exception import HttpCustomException, custom_exception_handler
+from typing import List, Optional
+from v1.model.schemas.schema import GetSchemaProductOut
 
 _config: Settings = get_config()
 logger: logging.Logger = logging.getLogger(_config.service_name)
@@ -29,6 +31,14 @@ class ProductsRepository(Repository):
         except Exception:
             exception_handler.handle_custom_exception(f"An error occurred creating product document (ID: {ID})")
 
+
+    def get_products(self, ID:str) -> List[GetSchemaProductOut]:
+        try:
+            self._get(ID)
+        except HttpCustomException:
+            raise
+        except Exception:
+            exception_handler.handle_custom_exception(f"Unexpected error retrieving products")
 
 def get_repository() -> ProductsRepository:
     return ProductsRepository()
