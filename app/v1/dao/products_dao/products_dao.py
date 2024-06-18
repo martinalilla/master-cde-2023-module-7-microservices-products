@@ -45,9 +45,9 @@ class ProductsDAO:
         except Exception:
             exception_handler.handle_custom_exception(f"An error occurred creating product")
 
-    def get_products(self, limit: int, last_product_id: Optional[str] = None, product_type: Optional[List[str]] = None, product_category: Optional[List[str]] = None) -> List[GetSchemaProductOut]:
+    def get_products(self) -> List[GetSchemaProductOut]:
         try:
-            products = self.repository.get_products(limit, last_product_id, product_type, product_category)
+            products = self.repository.get_products()
             logger.debug(f"Successfully retrieved {len(products)} products.")  
             return products
         except HttpCustomException:

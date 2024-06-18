@@ -27,3 +27,10 @@ class ProductsService(BaseService):
         product = self.products_dao.create_product(product_in)
         self.logger.info(f"Support request created successfully. ID: {product.ID}")
         return product
+    
+
+    def get_products(self) -> List[GetSchemaProductOut]:
+        products = self.products_dao.get_products()
+        self.logger.info(f"{len(products)} products retrieved.")
+        
+        return products
