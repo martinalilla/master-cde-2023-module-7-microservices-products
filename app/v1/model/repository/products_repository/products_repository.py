@@ -19,15 +19,15 @@ class ProductsRepository(Repository):
             subcollection_name = subcollection_name,
         )
 
-    def create_product(self, product_id: str, data: Product):
+    def create_product(self, ID: str, data: Product):
         logger.info("Creates a Product document in Firestore")
         try:
-            self._create(product_id, data)
-            logger.debug(f"Created product document (ID: {product_id})")
+            self._create(ID, data)
+            logger.debug(f"Created product document (ID: {ID})")
         except HttpCustomException:
             raise
         except Exception:
-            exception_handler.handle_custom_exception(f"An error occurred creating product document (ID: {product_id})")
+            exception_handler.handle_custom_exception(f"An error occurred creating product document (ID: {ID})")
 
 
 def get_repository() -> ProductsRepository:

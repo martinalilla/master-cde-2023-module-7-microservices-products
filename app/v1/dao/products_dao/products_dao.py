@@ -24,19 +24,19 @@ class ProductsDAO:
     def create_product(self, product_in: PostSchemaProductIn) -> PostSchemaProductOut:
         logger.info("Creates a new product for a user")
         try:
-            product_id = str(uuid.uuid4())
+            ID = str(uuid.uuid4())
             created_at = datetime.now().isoformat()
 
             product = Product(
                 **product_in.model_dump(),
-                product_id=product_id,
+                ID=ID,
                 created_at=created_at
             )
-            self.repository.create_product(product_id, product)
-            logger.debug(f"Created product (ID: {product_id})")
+            self.repository.create_product(ID, product)
+            logger.debug(f"Created product (ID: {ID})")
         
             return PostSchemaProductOut(
-                product_id=product_id,
+                ID=ID,
                 created_at=created_at
             )
         except HttpCustomException:

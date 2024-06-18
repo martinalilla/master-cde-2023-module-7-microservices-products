@@ -43,7 +43,7 @@ CREATE_PRODUCT = APIMetadata(
         title="Product Created",
         description="The newly created product information",
         example={
-            "product_id": "1caff255-ef44-4066-a7a3-884c81c34ecf",
+            "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
             "created_at": "2024-06-08T17:40:00Z",
         },
     ),
@@ -58,7 +58,7 @@ GET_PRODUCT = APIMetadata(
             title="Product Details",
             description="Details of the requested product",
             example={
-                "product_id": "1caff255-ef44-4066-a7a3-884c81c34ecf",
+                "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
                 "name": "Amazing T-Shirt",
                 "description": "This is a high-quality, comfortable T-Shirt",
                 "category_id": "7e96755c-88a3-4f3d-9f59-4d3ab3b277ee",
@@ -80,7 +80,7 @@ GET_PRODUCT = APIMetadata(
         title="Product ID",
         description="The ID of the product to retrieve",
         example={
-            "product_id": "1caff255-ef44-4066-a7a3-884c81c34ecf"
+            "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf"
         }
     )
 )

@@ -29,11 +29,11 @@ table = dynamodb.Table('Products')
 def add_product(product: Product):
     try:
         # Create a unique product ID
-        product_id = str(len(products) + 1)
+        ID = str(len(products) + 1)
         # Add product to DynamoDB
         response = table.put_item(
             Item={
-                'id': product_id,
+                'id': ID,
                 'name': product.name,
                 'price': product.price,
                 'description': product.description

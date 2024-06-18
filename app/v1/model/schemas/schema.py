@@ -23,7 +23,7 @@ class PostSchemaProductIn(BaseModel):
     )
 
 class PostSchemaProductOut(BaseModel):
-    product_id:  str                        # Unique identifier for the product
+    ID:  str                        # Unique identifier for the product
     created_at:  str                  # Date and time the product was created
 
     model_config = ConfigDict(
@@ -35,7 +35,7 @@ class PostSchemaProductOut(BaseModel):
     )
 
 class GetSchemaProductOut(BaseModel):
-  product_id:  str                       # ID of the product
+  ID:  str                       # ID of the product
   name:        str                       # Name of the product	
   description: str                       # Detailed description of the product	
   category_id: Optional[str] = None      # id for the category of the product

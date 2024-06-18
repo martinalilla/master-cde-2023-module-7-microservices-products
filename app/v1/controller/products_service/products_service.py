@@ -24,5 +24,5 @@ class ProductsService(BaseService):
         self.logger.debug(f"Product details: {product_in.model_dump()}")
 
         product = self.products_dao.create_product(product_in)
-        self.logger.info(f"Support request created successfully. ID: {product.product_id}")
+        self.logger.info(f"Support request created successfully. ID: {product.ID}")
         return product

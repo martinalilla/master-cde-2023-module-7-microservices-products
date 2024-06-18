@@ -17,7 +17,7 @@ class ProductEssential(BaseModel):
     )
 
 class Product(ProductEssential):
-    product_id:  str                                         # Unique identifier for the product
+    ID:  str                                         # Unique identifier for the product
     updated_at:  Optional[str] = None                   # Date and time the product was last updated
 
     model_config = ConfigDict(
