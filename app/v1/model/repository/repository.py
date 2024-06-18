@@ -45,29 +45,39 @@ class Repository:
             exception_handler.handle_custom_exception(f"An error occurred creating document (ID: {id})")
 
     def _get(self, ID: str):
-        try:     
-            data_db = self.dynamodb_client.table.get_item(Key={'ID': ID})
-            if not data_db.exists:
+        try:
+            response = self.dynamodb_client.table.get_item(Key={'ID': ID})
+            item = response.get('Item')
+
+            if item is None:
+                logger.info(f"No document found for product with ID {ID}")
                 raise HttpCustomException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Document doesn't exist",
-                internal_detail=f"Provided ID is invalid"
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Document doesn't exist",
+                    internal_detail=f"Provided ID {ID} is invalid"
                 )
 
             logger.debug(f"Document retrieved successfully for product with ID {ID}")
-            return data_db
+            return item
+
         except HttpCustomException:
             raise
-        except Exception:
-            exception_handler.handle_custom_exception(f"An unexpected error occurred retrieving a product (ID: {ID})")
+        except Exception as e:
+            logger.error(f"An unexpected error occurred retrieving a product (ID: {ID}): {e}")
+            raise HttpCustomException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="An unexpected error occurred",
+                internal_detail=str(e)
+            )
 
 
     def _get_all(self):
         try:     
             data_db = self.dynamodb_client.table.scan()
+            items = data_db.get('Items')
             if(len(data_db) > 0):
                 logger.debug(f"Retrieved {len(data_db)} documents.")
-                return data_db
+                return items
             return None
         
         except HttpCustomException:

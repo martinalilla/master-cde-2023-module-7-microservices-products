@@ -32,5 +32,4 @@ class ProductsService(BaseService):
     def get_products(self) -> List[GetSchemaProductOut]:
         products = self.products_dao.get_products()
         self.logger.info(f"{len(products)} products retrieved.")
-        
         return products

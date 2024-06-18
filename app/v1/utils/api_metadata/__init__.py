@@ -1,7 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel
-from v1.router.endpoint_responses import get_all_responses, delete_all_responses, post_responses
+from v1.router.endpoint_responses import get_all_responses, delete_all_responses, post_responses, get_one_responses
 
 class Schema(BaseModel):
     title: Optional[str] = None
@@ -53,8 +53,8 @@ GET_PRODUCT = APIMetadata(
     summary="Get product details",
     description="Retrieves the details of a specific product by its ID",
     operationId="GET_PRODUCT",
-    responses={
-        200: Schema(
+    responses=get_one_responses,
+    output= Schema(
             title="Product Details",
             description="Details of the requested product",
             example={
@@ -68,14 +68,6 @@ GET_PRODUCT = APIMetadata(
                 "created_at": "2024-06-08T17:40:00Z",
             }
         ),
-        404: Schema(
-            title="Error",
-            description="Product not found",
-            example={
-                "error": "Product with ID '1caff255-ef44-4066-a7a3-884c81c34ecf' not found"
-            }
-        )
-    },
     input=Schema(
         title="Product ID",
         description="The ID of the product to retrieve",

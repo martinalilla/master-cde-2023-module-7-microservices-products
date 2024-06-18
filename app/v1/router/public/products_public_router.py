@@ -19,15 +19,13 @@ def post(
 ) -> PostSchemaProductOut:
     return products_service.create_product(data)
 
-'''
+
+
 @router.get("/products", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary,
       description=GET_PRODUCT.description, operation_id=GET_PRODUCT.operationId, tags=['products'])
-def GET_PRODUCT(
-    limit: Annotated[int | None, Query(gte=1, lte=30)] = 10,
-    last_product_id: Optional[str] = None,
-    product_type: Union[Optional[str], Optional[List[str]],] = Query(default=None),
-    product_category: Union[Optional[str], Optional[List[str]],] = Query(default=None),
+def get_products(
     products_service: ProductsService = Depends()
-) -> GetSchemaProductOut:
-    return products_service.GET_PRODUCT(limit, last_product_id, product_type, product_category)
-'''
+) -> List[GetSchemaProductOut]:
+        return products_service.get_products()
+
+

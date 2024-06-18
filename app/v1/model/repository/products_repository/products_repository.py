@@ -32,9 +32,18 @@ class ProductsRepository(Repository):
             exception_handler.handle_custom_exception(f"An error occurred creating product document (ID: {ID})")
 
 
-    def get_products(self, ID:str) -> List[GetSchemaProductOut]:
+    def get_products(self) -> List[GetSchemaProductOut]:
+    #def get_products(self, ID:str) -> List[GetSchemaProductOut]:
         try:
-            self._get(ID)
+            #products = self._get(ID)
+            products = self._get_all()
+
+            if products is None:
+                logger.info("No products found matching the criteria.")
+                return dict()
+
+            return products
+        
         except HttpCustomException:
             raise
         except Exception:
