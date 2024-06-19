@@ -21,7 +21,7 @@ def post(
 
 
 
-@router.get("/products/get all the products", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary,
+@router.get("/products/", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary,
       description=GET_PRODUCT.description, operation_id='get all the product', tags=['products'])
 def get_products(
     products_service: ProductsService = Depends()
