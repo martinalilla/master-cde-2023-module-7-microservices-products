@@ -38,3 +38,8 @@ class ProductsService(BaseService):
         product = self.products_dao.get_product(ID)
         self.logger.info("product retrieved.")
         return product
+    
+    def get_product_byname(self, name:str) -> List[GetSchemaProductOut]:
+        product = self.products_dao.get_product_byname(name)
+        self.logger.info("product retrieved.")
+        return product

@@ -64,3 +64,13 @@ class ProductsDAO:
             raise
         except Exception:
             exception_handler.handle_custom_exception(f"Unexpected error retrieving the product")
+
+    def get_product_byname(self, name:str) -> List[GetSchemaProductOut]:
+        try:
+            product = self.repository.get_product_byname(name)
+            logger.debug(f"Successfully retrieved product with the name: {name}.")  
+            return product
+        except HttpCustomException:
+            raise
+        except Exception:
+            exception_handler.handle_custom_exception(f"Unexpected error retrieving the product")

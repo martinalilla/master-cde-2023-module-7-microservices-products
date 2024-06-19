@@ -30,10 +30,18 @@ def get_products(
 
 
 
-@router.get("/products/get one product/{ID}", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary, 
+@router.get("/products/{product_id}", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary, 
             description=GET_PRODUCT.description, operation_id='get one product', tags=['products'])
 def get_product(
-    ID:str,
+    product_id:str,
     products_service: ProductsService = Depends()) -> GetSchemaProductOut:
-    return products_service.get_product(ID)
+    return products_service.get_product(product_id)
+
+
+@router.get("/products/{name}", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary, 
+            description=GET_PRODUCT.description, operation_id='get one product by name', tags=['products'])
+def get_product(
+    name:str,
+    products_service: ProductsService = Depends()) -> GetSchemaProductOut:
+    return products_service.get_product_byname(name)
 

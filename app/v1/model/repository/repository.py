@@ -8,6 +8,7 @@ import json
 from decimal import Decimal
 from pydantic import BaseModel
 from starlette import status
+import boto3
 
 T = TypeVar('T')
 
@@ -84,6 +85,34 @@ class Repository:
             raise
         except Exception:
             exception_handler.handle_custom_exception(f"Unexpected error retrieving data")
+
+
+    def _get_byname(self, name: str):
+        try:
+            response = self.dynamodb_client.table.scan(FilterExpression=boto3.dynamodb.conditions.Attr('name').eq(name)
+)
+            item = response.get('Items')
+
+            if item is None:
+                logger.info(f"No document found for product with name {name}")
+                raise HttpCustomException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Product doesn't exist with this {name}",
+                    internal_detail=f"Provided name {name} is invalid"
+                )
+
+            logger.debug(f"Document retrieved successfully for product with name {name}")
+            return item
+
+        except HttpCustomException:
+            raise
+        except Exception as e:
+            logger.error(f"An unexpected error occurred retrieving a product (name: {name}): {e}")
+            raise HttpCustomException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="An unexpected error occurred",
+                internal_detail=str(e)
+            )
 
 
 def get_repository() -> Repository:

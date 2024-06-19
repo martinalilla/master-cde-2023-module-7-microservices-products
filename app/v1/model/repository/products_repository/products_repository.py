@@ -63,5 +63,21 @@ class ProductsRepository(Repository):
         except Exception:
             exception_handler.handle_custom_exception(f"Unexpected error retrieving products")
 
+
+    def get_product_byname(self, name:str) -> List[GetSchemaProductOut]:
+        try:
+            product = self._get_byname(name)
+
+            if product is None:
+                logger.info("No products found matching the criteria.")
+                return dict()
+
+            return product
+        
+        except HttpCustomException:
+            raise
+        except Exception:
+            exception_handler.handle_custom_exception(f"Unexpected error retrieving products")
+
 def get_repository() -> ProductsRepository:
     return ProductsRepository()
