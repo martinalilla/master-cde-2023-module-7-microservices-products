@@ -5,7 +5,7 @@ from v1.config.config import Settings, get_config
 from v1.model.db_schemas.db_schema import Product
 from v1.model.repository.products_repository.products_repository import ProductsRepository
 from v1.model.repository.products_repository.products_repository import get_repository
-from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, GetSchemaProductOut
+from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, GetSchemaProductOut, GetSchemaProductOutByName, GetSchemaProductOutAll
 from v1.utils.exception import HttpCustomException, custom_exception_handler
 from datetime import datetime
 from typing import List, Optional
@@ -45,7 +45,7 @@ class ProductsDAO:
         except Exception:
             exception_handler.handle_custom_exception(f"An error occurred creating product")
 
-    def get_products(self) -> List[GetSchemaProductOut]:
+    def get_products(self) -> List[GetSchemaProductOutAll]:
         try:
             products = self.repository.get_products()
             logger.debug(f"Successfully retrieved {len(products)} products.")  
@@ -65,7 +65,7 @@ class ProductsDAO:
         except Exception:
             exception_handler.handle_custom_exception(f"Unexpected error retrieving the product")
 
-    def get_product_byname(self, name:str) -> List[GetSchemaProductOut]:
+    def get_product_byname(self, name:str) -> List[GetSchemaProductOutByName]:
         try:
             product = self.repository.get_product_byname(name)
             logger.debug(f"Successfully retrieved product with the name: {name}.")  

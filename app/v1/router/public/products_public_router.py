@@ -1,11 +1,10 @@
-from fastapi import APIRouter, Body, Depends, Query
+from fastapi import APIRouter, Body, Depends
 from starlette import status
-from typing import Annotated, List, Optional, Union
+from typing import List
 
-from v1.config.config import Settings, get_config
 from v1.controller.products_service.products_service import ProductsService
-from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, GetSchemaProductOut
-from v1.utils.api_metadata import CREATE_PRODUCT, GET_PRODUCT
+from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, GetSchemaProductOut, GetSchemaProductOutByName, GetSchemaProductOutAll
+from v1.utils.api_metadata import CREATE_PRODUCT, GET_PRODUCT, GET_ALL, GET_PRODUCT_BY_NAME
 
 router = APIRouter()
 
@@ -21,16 +20,15 @@ def post(
 
 
 
-@router.get("/products/", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary,
-      description=GET_PRODUCT.description, operation_id='get all the product', tags=['products'])
+@router.get("/products", responses=GET_ALL.responses, summary=GET_ALL.summary,
+      description=GET_ALL.description, operation_id='get all the product', tags=['products'])
 def get_products(
     products_service: ProductsService = Depends()
-) -> List[GetSchemaProductOut]:
+) -> List[GetSchemaProductOutAll]:
         return products_service.get_products()
 
 
-
-@router.get("/products/{product_id}", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary, 
+@router.get("/products/id/{product_id}", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary, 
             description=GET_PRODUCT.description, operation_id='get one product', tags=['products'])
 def get_product(
     product_id:str,
@@ -38,10 +36,11 @@ def get_product(
     return products_service.get_product(product_id)
 
 
-@router.get("/products/{name}", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary, 
-            description=GET_PRODUCT.description, operation_id='get one product by name', tags=['products'])
-def get_product(
+@router.get("/products/name/{name}", responses=GET_PRODUCT_BY_NAME.responses, summary=GET_PRODUCT_BY_NAME.summary, 
+            description=GET_PRODUCT_BY_NAME.description, operation_id='get one product by name', tags=['products'])
+
+def get_product_by_name(
     name:str,
-    products_service: ProductsService = Depends()) -> GetSchemaProductOut:
+    products_service: ProductsService = Depends()) -> GetSchemaProductOutByName:
     return products_service.get_product_byname(name)
 

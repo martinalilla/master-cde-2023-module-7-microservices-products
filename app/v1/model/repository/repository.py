@@ -86,12 +86,12 @@ class Repository:
         except Exception:
             exception_handler.handle_custom_exception(f"Unexpected error retrieving data")
 
-
+    
     def _get_byname(self, name: str):
         try:
             response = self.dynamodb_client.table.scan(FilterExpression=boto3.dynamodb.conditions.Attr('name').eq(name)
 )
-            item = response.get('Items')
+            item = response.get('Items')[0]
 
             if item is None:
                 logger.info(f"No document found for product with name {name}")

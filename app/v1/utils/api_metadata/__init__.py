@@ -76,3 +76,54 @@ GET_PRODUCT = APIMetadata(
         }
     )
 )
+
+GET_ALL = APIMetadata(
+    summary="Get product details",
+    description="Retrieves the details of all the products",
+    operationId="GET_ALL_PRODUCTS",
+    responses=get_one_responses,
+    output= Schema(
+            title="Product Details",
+            description="Details of the requested product",
+            example={
+                "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
+                "name": "Amazing T-Shirt",
+                "description": "This is a high-quality, comfortable T-Shirt",
+                "category_id": "7e96755c-88a3-4f3d-9f59-4d3ab3b277ee",
+                "brand_id": "1c1a8ef9-7dab-4397-b73a-5f9a4143c135",
+                "price": 19.99,
+                "weight": 0.25,
+                "created_at": "2024-06-08T17:40:00Z",
+            }
+        )
+)
+
+GET_PRODUCT_BY_NAME = APIMetadata(
+    summary="Get product details",
+    description="Retrieves the details of just one product which matches with the requested name, since it is expected that products with the same name are equals",
+    operationId="GET_PRODUCT_BY_NAME",
+    responses=get_one_responses,
+    output= Schema(
+            title="Product Details",
+            description="Details of the requested product",
+            example={ 
+                    "ID": "e814c821-c7e7-46b2-988c-c3ffa0dd51c5",
+                    "name": "hat",
+                    "description": "This is a high-quality, comfortable hat",
+                    "category_id": "7e96755c-88a3-4f3d-9f59-4d3ab3b277ee",
+                    "brand_id": "1c1a8ef9-7dab-4397-b73a-5f9a4143c135",
+                    "price": 19.99,
+                    "weight": 0.25,
+                    "created_at": "2024-06-19T09:25:23.239317",
+                    "updated_at": 'null',
+                    "cover_url": 'null'  
+            }
+        ),
+    input=Schema(
+        title="Product name",
+        description="The name of the product to retrieve",
+        example={
+            "name": "hat"
+        }
+    )
+)
