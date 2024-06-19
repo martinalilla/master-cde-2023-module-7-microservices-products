@@ -53,7 +53,7 @@ class Repository:
                 logger.info(f"No document found for product with ID {ID}")
                 raise HttpCustomException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Document doesn't exist",
+                    detail=f"Product doesn't exist with this {ID}",
                     internal_detail=f"Provided ID {ID} is invalid"
                 )
 

@@ -33,9 +33,7 @@ class ProductsRepository(Repository):
 
 
     def get_products(self) -> List[GetSchemaProductOut]:
-    #def get_products(self, ID:str) -> List[GetSchemaProductOut]:
         try:
-            #products = self._get(ID)
             products = self._get_all()
 
             if products is None:
@@ -43,6 +41,22 @@ class ProductsRepository(Repository):
                 return dict()
 
             return products
+        
+        except HttpCustomException:
+            raise
+        except Exception:
+            exception_handler.handle_custom_exception(f"Unexpected error retrieving products")
+
+
+    def get_product(self, ID:str) -> List[GetSchemaProductOut]:
+        try:
+            product = self._get(ID)
+
+            if product is None:
+                logger.info("No products found matching the criteria.")
+                return dict()
+
+            return product
         
         except HttpCustomException:
             raise

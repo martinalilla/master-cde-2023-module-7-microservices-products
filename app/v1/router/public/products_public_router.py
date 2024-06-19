@@ -21,11 +21,19 @@ def post(
 
 
 
-@router.get("/products", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary,
-      description=GET_PRODUCT.description, operation_id=GET_PRODUCT.operationId, tags=['products'])
+@router.get("/products/get all the products", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary,
+      description=GET_PRODUCT.description, operation_id='get all the product', tags=['products'])
 def get_products(
     products_service: ProductsService = Depends()
 ) -> List[GetSchemaProductOut]:
         return products_service.get_products()
 
+
+
+@router.get("/products/get one product/{ID}", responses=GET_PRODUCT.responses, summary=GET_PRODUCT.summary, 
+            description=GET_PRODUCT.description, operation_id='get one product', tags=['products'])
+def get_product(
+    ID:str,
+    products_service: ProductsService = Depends()) -> GetSchemaProductOut:
+    return products_service.get_product(ID)
 
