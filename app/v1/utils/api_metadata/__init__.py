@@ -100,7 +100,7 @@ GET_ALL = APIMetadata(
 
 GET_PRODUCT_BY_NAME = APIMetadata(
     summary="Get product details",
-    description="Retrieves the details of just one product which matches with the requested name, since it is expected that products with the same name are equals",
+    description="Retrieves the details of just one product which matches with the requested name, since it is expected that products with the same name have the same characteristics",
     operationId="GET_PRODUCT_BY_NAME",
     responses=get_one_responses,
     output= Schema(
