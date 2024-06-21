@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Body, Depends
 from starlette import status
-
-from v1.config.config import Settings, get_config
+from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, PutSchemaProductOut, PutSchemaProductIn, DeleteSchemaProductOut
 from v1.controller.products_service.products_service import ProductsService
 from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut
-from v1.utils.api_metadata import CREATE_PRODUCT
+from v1.utils.api_metadata import CREATE_PRODUCT, PUT_PRODUCT, DELETE_PRODUCT
 
 router = APIRouter()
 
@@ -17,3 +16,23 @@ def post(
         products_service: ProductsService = Depends()
 ) -> PostSchemaProductOut:
     return products_service.create_product(data)
+
+@router.put("/products/{product_id}", responses=PUT_PRODUCT.responses, summary=PUT_PRODUCT.summary, 
+            description=PUT_PRODUCT.description, operation_id=PUT_PRODUCT.operationId, tags=['Product'])
+def put(
+        product_id: str,
+        data: PutSchemaProductIn = Body(..., title=PUT_PRODUCT.input.title, description=PUT_PRODUCT.input.description),
+        products_service: ProductsService = Depends()
+) -> PutSchemaProductOut:
+    updated_product = products_service.update_product(product_id, data)
+    return updated_product
+
+
+@router.delete("/products/{product_id}", responses=DELETE_PRODUCT.responses, summary=DELETE_PRODUCT.summary, 
+               description=DELETE_PRODUCT.description, operation_id=DELETE_PRODUCT.operationId, tags=['Product'])
+def delete(
+        product_id: str,
+        products_service: ProductsService = Depends()
+) -> DeleteSchemaProductOut:
+    response = products_service.delete_product(product_id)
+    return response

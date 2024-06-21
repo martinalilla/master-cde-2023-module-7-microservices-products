@@ -28,6 +28,8 @@ class Settings(BaseSettings):
 
     # AWS Environment variables
     dynamodb_project_id: Optional[str] = os.environ.get("DYNAMODB_PROJECT_ID")
+    dynamodb_region: Optional[str] = os.environ.get("DYNAMODB_REGION")
+    dynamodb_table: Optional[str] = os.environ.get("DYNAMODB_TABLE")
     PROJECT_ID_DEPLOY:  Optional[str] = os.environ.get("PROJECT_ID_DEPLOY")
     PROJECT_ID_MONITORING:  Optional[str] = os.environ.get("PROJECT_ID_MONITORING")
     LOGGING_LEVEL: Optional[str] = os.environ.get('LOGGING_LEVEL')

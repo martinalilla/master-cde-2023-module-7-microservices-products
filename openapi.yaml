@@ -116,7 +116,7 @@ components:
         weight: 0.25
     PostSchemaProductOut:
       properties:
-        product_id:
+        ID:
           type: string
           title: Product Id
         created_at:
@@ -126,9 +126,9 @@ components:
       additionalProperties: false
       type: object
       required:
-      - product_id
+      - ID
       - created_at
       title: PostSchemaProductOut
       examples:
       - created_at: '2024-06-08T17:40:00Z'
-        product_id: 1caff255-ef44-4066-a7a3-884c81c34ecf
+        ID: 1caff255-ef44-4066-a7a3-884c81c34ecf

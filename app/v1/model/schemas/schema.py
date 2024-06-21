@@ -34,16 +34,44 @@ class PostSchemaProductOut(BaseModel):
         }
     )
 
-class UpdateSchemaProductIn(BaseModel):
+class PutSchemaProductIn(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     category_id: Optional[str] = None
     brand_id: Optional[str] = None
     price: Optional[float] = None
     weight: Optional[float] = None
-    updated_at: Optional[datetime] = None 
+    cover_url: Optional[str] = None
+
+    class Config:
+        from_attributes=True
+        extra = "forbid"
+
+class PutSchemaProductOut(BaseModel):
+    ID: str
+    updated_at: datetime
 
     model_config = ConfigDict(
         from_attributes=True,
-        extra="forbid", 
+        extra="forbid",
+        json_schema_extra={
+            "examples": [{
+                "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
+                "updated_at": "2024-06-18T17:40:00Z"
+            }]
+        }
+    )
+
+class DeleteSchemaProductOut(BaseModel):
+    ID: str
+    message: str
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="forbid",
+        json_schema_extra={
+            "examples": [{
+                "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
+                "message": "Product with ID '1caff255-ef44-4066-a7a3-884c81c34ecf' has been deleted"
+            }]
+        }
     )

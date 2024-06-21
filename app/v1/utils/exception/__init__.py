@@ -2,7 +2,7 @@
 from functools import lru_cache
 import logging
 from typing import Any, Dict, Optional
-from fastapi import FastAPI, HTTPException, Request, Response
+from fastapi import FastAPI, HTTPException, Request, Response, requests
 from starlette import status
 import sys
 import traceback
@@ -27,7 +27,7 @@ class HttpCustomException(HTTPException):
         self.headers = headers
         self.error_code = error_code
         logger = logging.getLogger(_config.service_name)
-        logger.exception(f"{status_code} : {detail}", exc_info=False, stack_info=False)
+        logger.exception(f"{status_code} : {detail}", exc_info=True, stack_info=True)
         logger.debug({traceback.format_exc()})
 
 
@@ -42,7 +42,7 @@ class CustomExceptionHandler:
     def handle_custom_exception(self, msg: Optional[str] = ""):
         logger = logging.getLogger(self.logger_name)
         status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        logger.exception(f"{status_code} : {msg}", exc_info=False, stack_info=False)
+        logger.exception(f"{status_code} : {msg}", exc_info=True, stack_info=True)
         logger.debug({traceback.format_exc()})
 
         raise HTTPException(
@@ -61,7 +61,7 @@ async def handle_generic_exception(request: Request, call_next):
     except Exception as e:
         logger = logging.getLogger(_config.service_name)
         status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        logger.exception(f"{request.method} {request.url} {status_code} : {repr(e)}", exc_info=False, stack_info=False)
+        logger.exception(f"{request.method} {request.url} {status_code} : {repr(e)}", exc_info=True, stack_info=True)
         logger.debug({traceback.format_exc()})
         return Response(content="A generic problem occured", status_code=500)
     
