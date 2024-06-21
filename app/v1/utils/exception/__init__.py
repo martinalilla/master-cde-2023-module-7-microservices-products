@@ -2,7 +2,8 @@
 from functools import lru_cache
 import logging
 from typing import Any, Dict, Optional
-from fastapi import FastAPI, HTTPException, Request, Response, requests
+from fastapi import FastAPI, HTTPException, Request, Response
+import requests
 from starlette import status
 import sys
 import traceback

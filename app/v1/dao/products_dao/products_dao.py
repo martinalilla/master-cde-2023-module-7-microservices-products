@@ -7,8 +7,11 @@ from v1.utils.exception import HttpCustomException, custom_exception_handler
 from datetime import datetime
 import logging
 import uuid
+from typing import TypeVar, Generic
+from pydantic import BaseModel
 
 _config: Settings = get_config()
+T = TypeVar('T', bound=BaseModel)
 logger: logging.Logger = logging.getLogger(_config.service_name)
 exception_handler = custom_exception_handler()
 
@@ -42,19 +45,15 @@ class ProductsDAO:
         except Exception:
             exception_handler.handle_custom_exception(f"An error occurred creating product")
     #=================UPDATE  & DELETE FUNCTIONS=====================
-    def update_product(self, ID: str, data: PutSchemaProductIn) -> PutSchemaProductOut:
-            try:
-                existing_product = self.repository.get_product(ID)
-                for key, value in data.dict(exclude_unset=True).items():
-                    setattr(existing_product, key, value)
-                existing_product.updated_at = datetime.now().isoformat()
-                self.repository.update_product(ID, existing_product)
-                logger.debug(f"Product updated with ID {ID}")
-                return PutSchemaProductOut(ID=ID, updated_at=existing_product.updated_at)
-            except HttpCustomException:
-                raise
-            except Exception:
-                custom_exception_handler.handle_custom_exception(f"An error occurred updating product")
+
+    def update_product(self, ID: str,data: PutSchemaProductIn)->dict:
+        logger.info(f"Updating product with ID: {ID}")
+        try:
+            self.repository._update(ID, data)
+            logger.info(f"Product with ID: {ID} updated successfully")
+        except Exception as e:
+            logger.error(f"Failed to update product with ID: {ID}: {str(e)}")
+            raise
 
     def delete_product(self, ID: str):
         try:
@@ -63,4 +62,4 @@ class ProductsDAO:
         except HttpCustomException:
             raise
         except Exception:
-            custom_exception_handler.handle_custom_exception(f"An error occurred deleting product")
+            exception_handler.handle_custom_exception(f"An error occurred deleting product")

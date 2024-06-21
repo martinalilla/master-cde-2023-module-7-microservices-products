@@ -17,9 +17,9 @@ def post(
 ) -> PostSchemaProductOut:
     return products_service.create_product(data)
 
-@router.put("/products/{product_id}", responses=PUT_PRODUCT.responses, summary=PUT_PRODUCT.summary, 
-            description=PUT_PRODUCT.description, operation_id=PUT_PRODUCT.operationId, tags=['Product'])
-def put(
+@router.put("/products/id/{product_id}", responses=PUT_PRODUCT.responses, summary=PUT_PRODUCT.summary, 
+            description=PUT_PRODUCT.description, operation_id='Update product by ID', tags=['products'])
+def update_product(
         product_id: str,
         data: PutSchemaProductIn = Body(..., title=PUT_PRODUCT.input.title, description=PUT_PRODUCT.input.description),
         products_service: ProductsService = Depends()
@@ -28,8 +28,8 @@ def put(
     return updated_product
 
 
-@router.delete("/products/{product_id}", responses=DELETE_PRODUCT.responses, summary=DELETE_PRODUCT.summary, 
-               description=DELETE_PRODUCT.description, operation_id=DELETE_PRODUCT.operationId, tags=['Product'])
+@router.delete("/products/id/{product_id}", responses=DELETE_PRODUCT.responses, summary=DELETE_PRODUCT.summary, 
+               description=DELETE_PRODUCT.description, operation_id='Delete product by ID', tags=['products'])
 def delete(
         product_id: str,
         products_service: ProductsService = Depends()

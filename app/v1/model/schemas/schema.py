@@ -64,10 +64,9 @@ class PutSchemaProductOut(BaseModel):
 
 class DeleteSchemaProductOut(BaseModel):
     ID: str
-    message: str
+    message: Optional[str] = None
     model_config = ConfigDict(
         from_attributes=True,
-        extra="forbid",
         json_schema_extra={
             "examples": [{
                 "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",

@@ -47,21 +47,30 @@ class Repository:
     def _update(self, id: str, data: Generic[T]):
         logger.info(f"Updating a document in DynamoDB (ID: {id})")
         try:
-            # Update the item in the table
-            update_expression = "SET " + ", ".join(f"{k}=:{k}" for k in data.dict().keys())
-            expression_attribute_values = {f":{k}": v for k, v in data.dict().items()}
+            # Convert data to a dictionary and handle float to Decimal conversion
+            data_dict = data.dict()
+            for key, value in data_dict.items():
+                if isinstance(value, float):
+                    data_dict[key] = Decimal(str(value))
 
+            # Generate the update expression and attribute maps
+            update_expression = "SET " + ", ".join(f"#{k}=:{k}" for k in data_dict.keys())
+            expression_attribute_names = {f"#{k}": k for k in data_dict.keys()}
+            expression_attribute_values = {f":{k}": v for k, v in data_dict.items()}
+
+            # Update the item in the table
             self.dynamodb_client.table.update_item(
-            Key={'ID': id},
-            UpdateExpression=update_expression,
-            ExpressionAttributeValues=expression_attribute_values
+                Key={'ID': id},
+                UpdateExpression=update_expression,
+                ExpressionAttributeNames=expression_attribute_names,
+                ExpressionAttributeValues=expression_attribute_values
             )
             logger.debug(f"Updated document (ID: {id})")
         except HttpCustomException:
             raise
-        except Exception:
+        except Exception as e:
             exception_handler.handle_custom_exception(f"An error occurred updating document (ID: {id})")
-
+            logger.exception(e)
 
     def _delete(self, id: str):
         logger.info(f"Deleting a document in DynamoDB (ID: {id})")
@@ -72,6 +81,8 @@ class Repository:
             raise
         except Exception:
             exception_handler.handle_custom_exception(f"An error occurred deleting document (ID: {id})")
-
+    
+    def delete_product(self, id: str):
+        return self._delete(id)
 def get_repository() -> Repository:
     return Repository()

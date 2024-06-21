@@ -3,6 +3,7 @@ from v1.config.config import Settings, get_config
 from v1.controller.base_service import BaseService
 from v1.dao.products_dao.products_dao import ProductsDAO
 from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, PutSchemaProductOut, PutSchemaProductIn, DeleteSchemaProductOut
+from datetime import datetime
 
 _config: Settings = get_config()
 
@@ -29,12 +30,13 @@ class ProductsService(BaseService):
     #=================UPDATE  & DELETE FUNCTIONS=====================
     def update_product(self, ID: str, data: PutSchemaProductIn) -> PutSchemaProductOut:
         self.logger.info(f"Updating product with ID {ID}")
-        updated_product = self.products_dao.update_product(ID, data)
+        updated_at = datetime.now()
+        self.products_dao.update_product(ID, data)
         self.logger.info(f"Product with ID {ID} updated")
-        return updated_product
+        return PutSchemaProductOut(ID=ID, updated_at=updated_at)
 
     def delete_product(self, ID: str) -> DeleteSchemaProductOut:
         self.logger.info(f"Deleting product with ID {ID}")
         self.products_dao.delete_product(ID)
         self.logger.info(f"Product with ID {ID} deleted")
-        return DeleteSchemaProductOut(message=f"Product with ID '{ID}' has been deleted")
+        return DeleteSchemaProductOut(ID=ID, message=f"Product with ID '{ID}' has been deleted")
