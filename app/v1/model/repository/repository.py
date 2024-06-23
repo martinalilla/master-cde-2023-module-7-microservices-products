@@ -64,12 +64,7 @@ class Repository:
         except HttpCustomException:
             raise
         except Exception as e:
-            logger.error(f"An unexpected error occurred retrieving a product (ID: {ID}): {e}")
-            raise HttpCustomException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="An unexpected error occurred",
-                internal_detail=str(e)
-            )
+            exception_handler.handle_custom_exception(f"An unexpected error occurred retrieving a product (ID: {ID})")
 
 
     def _get_all(self):
@@ -89,8 +84,7 @@ class Repository:
     
     def _get_byname(self, name: str):
         try:
-            response = self.dynamodb_client.table.scan(FilterExpression=boto3.dynamodb.conditions.Attr('name').eq(name)
-)
+            response = self.dynamodb_client.table.scan(FilterExpression=boto3.dynamodb.conditions.Attr('name').eq(name))
             item = response.get('Items')[0]
 
             if item is None:
@@ -107,12 +101,7 @@ class Repository:
         except HttpCustomException:
             raise
         except Exception as e:
-            logger.error(f"An unexpected error occurred retrieving a product (name: {name}): {e}")
-            raise HttpCustomException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="An unexpected error occurred",
-                internal_detail=str(e)
-            )
+            exception_handler.handle_custom_exception(f"An unexpected error occurred retrieving a product (name: {name})")
 
 
 def get_repository() -> Repository:

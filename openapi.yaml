@@ -19,9 +19,29 @@ paths:
             application/json:
               schema: {}
   /public/v1/products:
+    get:
+      tags:
+      - Get
+      summary: Get product details
+      description: Retrieves the details of all the products
+      operationId: get all the product
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/GetSchemaProductOut'
+                type: array
+                title: Response Get All The Product
+        '500':
+          description: Internal server error. Please contact the support team.
+          content:
+            application/json: {}
     post:
       tags:
-      - Product
+      - Post
       summary: Create a new product
       description: Creates a new product in the system
       operationId: CREATE_PRODUCT
@@ -72,8 +92,136 @@ paths:
             the support team.
           content:
             application/json: {}
+  /public/v1/products/id/{product_id}:
+    get:
+      tags:
+      - Get
+      summary: Get product details
+      description: Retrieves the details of a specific product by its ID
+      operationId: get one product
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Product Id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSchemaProductOut'
+        '500':
+          content:
+            application/json: {}
+          description: Internal server error. Please contact the support team.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /public/v1/products/name/{name}:
+    get:
+      tags:
+      - Get
+      summary: Get product details
+      description: Retrieves the details of just one product which matches with the
+        requested name, since it is expected that products with the same name have
+        the same characteristics
+      operationId: get one product by name
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSchemaProductOut'
+        '500':
+          content:
+            application/json: {}
+          description: Internal server error. Please contact the support team.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    GetSchemaProductOut:
+      properties:
+        ID:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        category_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category Id
+        brand_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand Id
+        price:
+          type: number
+          title: Price
+        weight:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Weight
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        cover_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Url
+      additionalProperties: false
+      type: object
+      required:
+      - ID
+      - name
+      - description
+      - price
+      - created_at
+      title: GetSchemaProductOut
+      examples:
+      - ID: 1caff255-ef44-4066-a7a3-884c81c34ecf
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     PostSchemaProductIn:
       properties:
         name:
@@ -118,10 +266,9 @@ components:
       properties:
         ID:
           type: string
-          title: Product Id
+          title: Id
         created_at:
           type: string
-          format: date-time
           title: Created At
       additionalProperties: false
       type: object
@@ -130,5 +277,26 @@ components:
       - created_at
       title: PostSchemaProductOut
       examples:
-      - created_at: '2024-06-08T17:40:00Z'
-        ID: 1caff255-ef44-4066-a7a3-884c81c34ecf
+      - ID: 1caff255-ef44-4066-a7a3-884c81c34ecf
+        created_at: '2024-06-08T17:40:00Z'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
