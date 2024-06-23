@@ -28,7 +28,7 @@ def update_product(
     return updated_product
 
 
-@router.delete("/products/id/{product_id}", responses=DELETE_PRODUCT.responses, summary=DELETE_PRODUCT.summary, 
+@router.delete("/products/id/{product_id}", responses=DELETE_PRODUCT.responses, response_model_exclude_none=True, summary=DELETE_PRODUCT.summary, 
                description=DELETE_PRODUCT.description, operation_id='Delete product by ID', tags=['products'])
 def delete(
         product_id: str,

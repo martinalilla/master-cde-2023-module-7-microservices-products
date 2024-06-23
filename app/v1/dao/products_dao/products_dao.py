@@ -5,6 +5,8 @@ from v1.model.repository.repository import get_repository
 from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, PutSchemaProductOut, PutSchemaProductIn, DeleteSchemaProductOut
 from v1.utils.exception import HttpCustomException, custom_exception_handler
 from datetime import datetime
+from v1.model.database import get_dynamodb_client
+
 import logging
 import uuid
 from typing import TypeVar, Generic

@@ -48,7 +48,7 @@ class Repository:
         logger.info(f"Updating a document in DynamoDB (ID: {id})")
         try:
             # Convert data to a dictionary and handle float to Decimal conversion
-            data_dict = data.dict()
+            data_dict = data.model_dump(exclude_none=True)
             for key, value in data_dict.items():
                 if isinstance(value, float):
                     data_dict[key] = Decimal(str(value))

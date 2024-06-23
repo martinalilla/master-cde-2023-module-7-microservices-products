@@ -31,6 +31,11 @@ class ProductsService(BaseService):
     def update_product(self, ID: str, data: PutSchemaProductIn) -> PutSchemaProductOut:
         self.logger.info(f"Updating product with ID {ID}")
         updated_at = datetime.now()
+
+        # # Convert the input data to a dictionary and add updated_at
+        # update_data = data.model_dump(exclude_none=True)
+        # update_data["updated_at"] = updated_at
+
         self.products_dao.update_product(ID, data)
         self.logger.info(f"Product with ID {ID} updated")
         return PutSchemaProductOut(ID=ID, updated_at=updated_at)

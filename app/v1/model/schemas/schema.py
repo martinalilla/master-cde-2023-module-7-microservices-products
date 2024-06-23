@@ -50,14 +50,28 @@ class PutSchemaProductIn(BaseModel):
 class PutSchemaProductOut(BaseModel):
     ID: str
     updated_at: datetime
-
+    name: Optional[str] = None
+    description: Optional[str] = None
+    category_id: Optional[str] = None
+    brand_id: Optional[str] = None
+    price: Optional[float] = None
+    weight: Optional[float] = None
+    cover_url: Optional[str] = None
+    
     model_config = ConfigDict(
         from_attributes=True,
         extra="forbid",
-        json_schema_extra={
+        json_schema_extra = {
             "examples": [{
                 "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
-                "updated_at": "2024-06-18T17:40:00Z"
+                "updated_at": "2024-06-18T17:40:00Z",
+                "name": "Product Name",
+                "description": "Product Description",
+                "category_id": "cat12345",
+                "brand_id": "brand67890",
+                "price": 99.99,
+                "weight": 1.5,
+                "cover_url": "http://example.com/image.jpg"
             }]
         }
     )
