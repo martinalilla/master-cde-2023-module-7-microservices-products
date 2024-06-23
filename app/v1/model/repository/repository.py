@@ -70,7 +70,6 @@ class Repository:
             raise
         except Exception as e:
             exception_handler.handle_custom_exception(f"An error occurred updating document (ID: {id})")
-            logger.exception(e)
 
     def _delete(self, id: str):
         logger.info(f"Deleting a document in DynamoDB (ID: {id})")

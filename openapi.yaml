@@ -72,8 +72,126 @@ paths:
             the support team.
           content:
             application/json: {}
+  /public/v1/products/id/{product_id}:
+    put:
+      tags:
+      - Put
+      summary: Update a product
+      description: Updates the details of an existing product by its ID
+      operationId: Update product by ID
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Product Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PutSchemaProductIn'
+              title: Product Details
+              description: The details to update for the product
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutSchemaProductOut'
+        '202':
+          content:
+            application/json: {}
+          description: Object updated
+        '400':
+          content:
+            application/json: {}
+          description: The server cannot or will not process the request due to something
+            that is perceived to be a client error
+        '401':
+          content:
+            application/json: {}
+          description: Unauthorized. Ensure you are using a valid JWT token.
+        '403':
+          content:
+            application/json: {}
+          description: Credential error. Ensure you are using a valid JWT token.
+        '422':
+          content:
+            application/json: {}
+          description: Check parameter values correctness in according to the documentation
+            above.
+        '500':
+          content:
+            application/json: {}
+          description: Internal server error. Please contact the support team.
+        '503':
+          content:
+            application/json: {}
+          description: Service is not currently available. Try again later or contact
+            the support team.
+    delete:
+      tags:
+      - Delete
+      summary: Delete a product
+      description: Deletes a specific product by its ID
+      operationId: Delete product by ID
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Product Id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteSchemaProductOut'
+        '500':
+          content:
+            application/json: {}
+          description: Internal server error. Please contact the support team.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    DeleteSchemaProductOut:
+      properties:
+        ID:
+          type: string
+          title: Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      additionalProperties: false
+      type: object
+      required:
+      - ID
+      title: DeleteSchemaProductOut
+      examples:
+      - ID: 1caff255-ef44-4066-a7a3-884c81c34ecf
+        message: Product correctly deleted
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     PostSchemaProductIn:
       properties:
         name:
@@ -116,7 +234,7 @@ components:
         weight: 0.25
     PostSchemaProductOut:
       properties:
-        ID:
+        product_id:
           type: string
           title: Product Id
         created_at:
@@ -126,9 +244,92 @@ components:
       additionalProperties: false
       type: object
       required:
-      - ID
+      - product_id
       - created_at
       title: PostSchemaProductOut
       examples:
-      - created_at: '2024-06-08T17:40:00Z'
-        ID: 1caff255-ef44-4066-a7a3-884c81c34ecf
+      - ID: 1caff255-ef44-4066-a7a3-884c81c34ecf
+        created_at: '2024-06-08T17:40:00Z'
+    PutSchemaProductIn:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        category_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category Id
+        brand_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand Id
+        price:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Price
+        weight:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Weight
+        cover_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Url
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
+      additionalProperties: false
+      type: object
+      title: PutSchemaProductIn
+      examples:
+      - name: Updated T-Shirt
+        price: 29.99
+    PutSchemaProductOut:
+      properties:
+        ID:
+          type: string
+          title: Id
+        updated_at:
+          type: string
+          title: Updated At
+      additionalProperties: false
+      type: object
+      required:
+      - ID
+      - updated_at
+      title: PutSchemaProductOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

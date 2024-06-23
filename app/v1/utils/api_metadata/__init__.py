@@ -100,6 +100,14 @@ PUT_PRODUCT = APIMetadata(
             "name": "Updated T-Shirt",
             "price": 29.99
         }
+    ),
+    output=Schema(
+        title="Product Updated",
+        description="Details of the updated product",
+        example={
+            "ID":"1caff255-ef44-4066-a7a3-884c81c34ecf",
+            "updated_at": "2024-06-23T15:00:26Z"
+        }
     )
 )
 
@@ -113,6 +121,14 @@ DELETE_PRODUCT = APIMetadata(
         description="The ID of the product to delete",
         example={
             "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf"
+        }
+    ),
+    output=Schema(
+        title="Product Deleted",
+        description="Details of the deleted product",
+        example={
+            "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
+            "message": "Product correctly deleted"
         }
     )
 )

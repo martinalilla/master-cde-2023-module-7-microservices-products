@@ -54,8 +54,7 @@ class ProductsDAO:
             self.repository._update(ID, data)
             logger.info(f"Product with ID: {ID} updated successfully")
         except Exception as e:
-            logger.error(f"Failed to update product with ID: {ID}: {str(e)}")
-            raise
+            exception_handler.handle_custom_exception(f"Failed to update product with ID: {ID}")
 
     def delete_product(self, ID: str):
         try:

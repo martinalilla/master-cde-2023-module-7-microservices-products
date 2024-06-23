@@ -4,7 +4,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
-from v1.utils.api_metadata import CREATE_PRODUCT
+from v1.utils.api_metadata import CREATE_PRODUCT, DELETE_PRODUCT, PUT_PRODUCT
 
 class PostSchemaProductIn(BaseModel):
     name:        str                        # Name of the product	
@@ -42,49 +42,40 @@ class PutSchemaProductIn(BaseModel):
     price: Optional[float] = None
     weight: Optional[float] = None
     cover_url: Optional[str] = None
+    updated_at: Optional[str] = None
 
-    class Config:
-        from_attributes=True
-        extra = "forbid"
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="forbid",           # Forbid additional generic key-value pairs in support
+        json_schema_extra={
+            "examples": [PUT_PRODUCT.input.example]
+        }
+    )
 
 class PutSchemaProductOut(BaseModel):
     ID: str
-    updated_at: datetime
-    name: Optional[str] = None
-    description: Optional[str] = None
-    category_id: Optional[str] = None
-    brand_id: Optional[str] = None
-    price: Optional[float] = None
-    weight: Optional[float] = None
-    cover_url: Optional[str] = None
+    updated_at: str
     
     model_config = ConfigDict(
         from_attributes=True,
         extra="forbid",
-        json_schema_extra = {
-            "examples": [{
-                "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
-                "updated_at": "2024-06-18T17:40:00Z",
-                "name": "Product Name",
-                "description": "Product Description",
-                "category_id": "cat12345",
-                "brand_id": "brand67890",
-                "price": 99.99,
-                "weight": 1.5,
-                "cover_url": "http://example.com/image.jpg"
-            }]
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="forbid",           # Forbid additional generic key-value pairs in support
+        json_schema_extra={
+            "examples": [PUT_PRODUCT.output.example]
         }
+    )
     )
 
 class DeleteSchemaProductOut(BaseModel):
     ID: str
     message: Optional[str] = None
+
     model_config = ConfigDict(
         from_attributes=True,
+        extra="forbid",           # Forbid additional generic key-value pairs in support
         json_schema_extra={
-            "examples": [{
-                "ID": "1caff255-ef44-4066-a7a3-884c81c34ecf",
-                "message": "Product with ID '1caff255-ef44-4066-a7a3-884c81c34ecf' has been deleted"
-            }]
+            "examples": [DELETE_PRODUCT.output.example]
         }
     )
