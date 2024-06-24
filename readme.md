@@ -9,18 +9,16 @@ Chosen approach: Release Branching (one branch for development, one branch for t
 ### To Start
 - If you are working in VisualStudio Code, create a launch.json file with the following content:
 ```
-   {
+{
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
             "name": "Microservice Development",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/run.py",
             "env": {
                 // adjust pythonpath for local module 
-                // adjust pythonpath for local module
                 "PYTHONPATH": "${workspaceFolder}/app"
             },
             "envFile": "${workspaceFolder}/.env.development",

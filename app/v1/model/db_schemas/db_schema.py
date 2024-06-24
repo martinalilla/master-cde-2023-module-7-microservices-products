@@ -2,7 +2,6 @@
 from enum import Enum
 from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional
-from datetime import datetime
 
 class ProductEssential(BaseModel):
     name:        str                        # Name of the product	
@@ -19,7 +18,7 @@ class ProductEssential(BaseModel):
 
 class Product(ProductEssential):
     ID:  str                                         # Unique identifier for the product
-    updated_at:  Optional[str] = None    
+    updated_at:  Optional[str] = None                   # Date and time the product was last updated
 
     model_config = ConfigDict(
     from_attributes=True,

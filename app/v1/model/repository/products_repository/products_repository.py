@@ -3,7 +3,11 @@ from v1.config.config import Settings, get_config
 from v1.model.db_schemas.db_schema import ProductEssential
 from v1.model.repository.repository import Repository
 from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, PutSchemaProductOut, PutSchemaProductIn, DeleteSchemaProductOut
+from v1.model.db_schemas.db_schema import Product, ProductEssential
+from v1.model.repository.repository import Repository, Condition
 from v1.utils.exception import HttpCustomException, custom_exception_handler
+from typing import List, Optional
+from v1.model.schemas.schema import GetSchemaProductOut
 
 _config: Settings = get_config()
 logger: logging.Logger = logging.getLogger(_config.service_name)
@@ -20,7 +24,7 @@ class ProductsRepository(Repository):
             subcollection_name = subcollection_name,
         )
 
-    def create_product(self, ID: str, data: ProductEssential):
+    def create_product(self, ID: str, data: Product):
         logger.info("Creates a Product document in Firestore")
         try:
             self._create(ID, data)
@@ -53,17 +57,60 @@ class ProductsRepository(Repository):
     def delete_product(self, ID: str) -> DeleteSchemaProductOut:
         logger.info(f"Deleting Product document (ID: {ID})")
         try:
-            success = self._delete(ID)
-            if not success:
-                raise HttpCustomException(status_code=404, detail="Product not found")
+            self._delete(ID)
 
             logger.debug(f"Deleted product document (ID: {ID})")
-            return DeleteSchemaProductOut(message=f"Product with ID '{ID}' has been deleted")
+            return DeleteSchemaProductOut(ID=ID, message=f"Product with ID '{ID}' has been deleted")
         except HttpCustomException:
             raise
         except Exception:
             exception_handler.handle_custom_exception(f"An error occurred deleting product document (ID: {ID})")
 
     
+
+
+    def get_products(self) -> List[GetSchemaProductOut]:
+        try:
+            products = self._get_all()
+
+            if products is None:
+                logger.info("No products found matching the criteria.")
+                return dict()
+
+            return products
+        
+        except HttpCustomException:
+            raise
+        except Exception:
+            exception_handler.handle_custom_exception(f"Unexpected error retrieving products")
+
+
+    def get_product(self, ID:str) -> List[GetSchemaProductOut]:
+        try:
+            product = self._get(ID)
+
+            return product
+        
+        except HttpCustomException:
+            raise
+        except Exception:
+            exception_handler.handle_custom_exception(f"Unexpected error retrieving products")
+
+
+    def get_product_byname(self, name:str) -> List[GetSchemaProductOut]:
+        try:
+            product = self._get_byname(name)
+
+            if product is None:
+                logger.info("No products found matching the criteria.")
+                return dict()
+
+            return product
+        
+        except HttpCustomException:
+            raise
+        except Exception:
+            exception_handler.handle_custom_exception(f"Unexpected error retrieving products")
+
 def get_repository() -> ProductsRepository:
     return ProductsRepository()

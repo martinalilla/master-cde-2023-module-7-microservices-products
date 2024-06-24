@@ -1,9 +1,10 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from v1.config.config import Settings, get_config
 from v1.controller.base_service import BaseService
 from v1.dao.products_dao.products_dao import ProductsDAO
-from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, PutSchemaProductOut, PutSchemaProductIn, DeleteSchemaProductOut
+from v1.model.schemas.schema import PostSchemaProductIn, PostSchemaProductOut, PutSchemaProductOut, PutSchemaProductIn, DeleteSchemaProductOut, GetSchemaProductOut
 from datetime import datetime
+from typing import List
 
 _config: Settings = get_config()
 
@@ -42,3 +43,19 @@ class ProductsService(BaseService):
         self.products_dao.delete_product(ID)
         self.logger.info(f"Product with ID {ID} deleted")
         return DeleteSchemaProductOut(ID=ID, message=f"Product with ID '{ID}' has been deleted")
+    
+
+    def get_products(self) -> List[GetSchemaProductOut]:
+        products = self.products_dao.get_products()
+        self.logger.info(f"{len(products)} products retrieved.")
+        return products
+    
+    def get_product(self, ID:str) -> List[GetSchemaProductOut]:
+        product = self.products_dao.get_product(ID)
+        self.logger.info("product retrieved.")
+        return product
+    
+    def get_product_byname(self, name:str) -> List[GetSchemaProductOut]:
+        product = self.products_dao.get_product_byname(name)
+        self.logger.info("product retrieved.")
+        return product
