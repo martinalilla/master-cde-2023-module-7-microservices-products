@@ -7,6 +7,16 @@ The code is written in Python, it implements the [OpenAPI Specification](https:/
 All the code is designed to run in a simple Docker container (see the _Dockerfile_), to maintain all the advantages of the microservices architecture, run in a lightweight isolated environment (so other microservices can be added following this architecture) in order to decouple the microservice, and to easily allow its scalability thanks to the cloud architecture.
 Since the code is designed to work correctly with the Docker container, it's better to test it _as is_ with the provided image in ECR [inserire link]() with the provided AWS infrastructure, but, if you want, you can test it in your local machine by following the _local execution_ steps below (please, remember that you can encounter errors due to your different environment).
 
+## Test the code
+
+### Prerequisites
+In order to run this code, you must satisfy these prerequisites:
+- Have an AWS account with both access and secret keys.
+- Have access to AWS DynamoDB and ECR
+- Have Docker installed (needed to push the image to ECR)
+- Have installed the [AWS-CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) (only if you want to test in local)
+
+### Steps
 1. Go to the products microservice endpoints: 
 - endpoint
 
@@ -21,27 +31,41 @@ Local Run
 `docker run --env-file=.env.development -d --name productscontainer -p 8080:8080 productsimage`
 4. Test the products microservice in `localhost:8080/docs`
 
-## Prerequisites
-In order to run this code, you must satisfy these prerequisites:
-- Have an AWS account with both access and secret keys.
-- Have access to AWS DynamoDB and ECR
-- Have Docker installed (needed to push the image to ECR)
-- Have installed the [AWS-CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) (only if you want to test in local)
+## Software Management Approach
+### TEAM Responsibilities 
+Here the goals of each team member's work:
+- Lilla Martina: Microservice backbone & template, team coordination, PR review
+- Patanè Gabriele: Readme, test microservice in local and cloud
+- Puzzo Michele: Post & Get APIs
+- Ursino Zarmina: Put & Delete APIs
 
+The team has been organized per tasks, with the major goal to equally divide the total amount of work. The team had three meeting per week, in order to constantly review the activities and solve the encountered problmems. For each week a final goal has been assigned (i.e. 1st week: complete the microservice code template, 2nd week: implement the first API, etc) based on the final delivery date.
 
-### Software Management Approach
+Finally, the team also actively coperated with the platform team with multiple meetings when the project started, and then, one meeting per week, in order to clarify and meet the technological constraints, and to develop a functional and easy to use code to implement the products microservice. This was fundamental in order to generate the final Docker image to later use in the cloud environment.
 
-The chosen software management approach consists in two kind of branches: __Feature branches__ and __Production branch__ with code versioning.
+### Branching Strategy
 
-The _Feature Branching_ approach is used to implement the new features (i.e. the POST, GET, PUT, DELETE APIs + docs) in order to allow the developers to work in isolation each others (after assigned the activities to each of them); once the feature is complete, it is merged back into one of the _development_ branch, in order to test it with the provided development infrastructure. 
+The chosen software management approach consists in a mix of __Release Branching__ (one branch for development, one branch for test, one branch for production) and __Feature Branching__ (e.g. _Post&Get/products_). This mix has been chosen to follow the best practices in a real work environment.
 
-When the tests have been completed successfully, the __development__ branch is merged to the __production__ branch, where the code is live in the production cloud infrastructure. 
-If something goes wrong with the dedicated tests, a new branch is opened to fix the problem asap.
+The __Feature Branching__ approach is used to implement the new features (i.e. the POST, GET, PUT, DELETE APIs + docs) in order to allow the developers to work in isolation each others (after assigned the activities to each of them); once the feature is complete, it is merged back into the _development_ branch, in order to test it with the provided development infrastructure. 
 
-Of course, all the changes are reviewed by Pull Requests before the merging operation to the _production_ and _development_ branches.
-This approach ensures simple and efficient CI/CD operations, with independent and rapid development of each feature.
+The __Release Branching__ approach has been implemented to have different versions of the working code. In particular, we can distinguish three branches: _Development_, _Test_ and _Production_, like in real case scenario. Each branch reflects a dedicated environment (each with the purpose of the branch name),
+so, for example, when the _development_ branch is updated, it is because this new code version will be used in the related development cloud environment, in order to test it, fix the related bugs / problems (with dedicated __bugfix__ branches, as the _feature branching_ suggests), and, finally, if the tests are successful, the code can be pushed to the other _release_ branches: first in the _test_ branch, and, finally, after each test has been completed in the dedicated test environment - otherwise, even in this case, dedicated _bugfix_ branches will be created - it will be pushed in to the __production__ branch, that is the final branch where the cleaned and well-working code resides with its dedicated production environment, so its represent the final stage of the code development. 
 
-Finally, to maintain the code versioning, the __Release branching__ approach has been implemented, i.e. there is a branch for each version to prepare for a new production release (of course the _production_ branch is always the one with the code implemented in the production cloud environment). So, each version has its _features_ and _development_ branches, and when the new release _development_ branch is ready to go in production, it is merged with the _production_ branch as explained before [aggiungere versioning sulla repo]()
+When the code is pushed in the _production branch_, of course, some problems and bugs can later occur (you can be very good, but not perfect!) due to different reasons (like changes in the infrastructure, or something that needs to be added, etc). In this case, this branching strategy helps us; in fact, the problems can be solved with a new version of the code! Everything starts again from the features of the development branch, and it continues as described above, up to the production branch, that will always reflect the current and active production environment. But in this case all the other branches, will be named and contain the new version of the code which is put also in the branches names.
+
+### Merging Strategy
+Defining a merging strategy is necessary to allow each developer to work in an ordered and efficient way, to align the team's workflow, meet the project requirements in a structured way and to also have a better quality code. The merging happens between _feature branches_ towards _release branches_ each time that a new feature / bugfix is completed.
+
+In this specific case, even if there are three _release branches (dev, test, prod)_ to follow the best practices, the _test_ branch is ininfluent for our scope because of the lack of its dedicated cloud environment, and also for the simplicity of this microservice. So, only _development_ and _production_  branches will be taken into account for this project.
+The workflow is the following:
+1. Definition of new features - problems
+2. Activities assignment to each team member
+3. Creation of dedicated _feature branches_ (based on the previous assignment), starting from the _development_ branch
+4. Once a feature is completed, its _feature branch_ needs to be merged to the _development branch_ in order to be tested. A __Pull Request__ is opened.
+5. If the reviewer of the _pull request_ approve it, it is merged to the _development branch_ in order to be tested, otherwise it will be rejected with the reason, in such way that the developer can fix the problem and apply the P_R_ another time.
+6. The code in _development branch_ is tested in its dedicated infrastructure, in order to verify if there are some problems with the application, and if so, restart from the point 1.
+7. At this point, the code passed all the tests and it's ready to go in production! So, a new _pull request_ is made, from the _development_ to the _production branch_, to update the latter with the latest code version.
 
 ---
 ### Environment preparation
@@ -155,8 +179,14 @@ Controllers and routers should not be changed.
 
 
 
-### Generate OpenAPI spec
-To generate the OpenAPI spec, please, run in your active virtual environment the following commands:
+### API Documentation
+#TODO 
+The code implements the [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification) interface description for HTTP APIs through the [FastAPI](https://fastapi.tiangolo.com/) framework to easily and automatically build them. It's possible to test the APIs through [Swagger](https://swagger.io/) very easily by going to `localhost:8080/docs`
+
+#CONTINUE
+
+#### Generate OpenAPI spec
+The OpenAPI spec is generated as `openapi.yaml` through the dedicated python script `extract_openapi.py`. To generate the OpenAPI spec, please, run in your active virtual environment the following commands:
 ```
 $env:ENVIRONMENT=local
 $env:PYTHONPATH=./app
