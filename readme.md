@@ -223,7 +223,7 @@ The OpenAPI spec can also be generated as `openapi.yaml` through the dedicated p
 
 To generate the OpenAPI spec, please, run in your active virtual environment the following commands:
 ```
-$env:ENVIRONMENT=local
-$env:PYTHONPATH=./app
+$env:ENVIRONMENT="local"
+$env:PYTHONPATH="./app"
 python extract_openapi.py
 ```
