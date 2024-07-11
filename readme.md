@@ -39,7 +39,7 @@ In order to run this code, you must satisfy these prerequisites:
     ```
 3. Start the Docker container with:
     ```
-    docker run --env-file=.env.development -d --name productscontainer -p 8080:8080 productsimage
+    docker run --env-file=.env.test -d --name productscontainer -p 8080:8080 productsimage
     ```
 4. Test the products microservice going to the address `localhost:8080/docs`
 
@@ -173,7 +173,7 @@ Below the required steps to run and test the code locally during the development
 
     - Start the Docker Container
       ```
-      docker run --env-file=.env.development -d --name productscontainer -p 8080:8080 productsimage
+      docker run --env-file=.env.test -d --name productscontainer -p 8080:8080 productsimage
       ```
 
 
