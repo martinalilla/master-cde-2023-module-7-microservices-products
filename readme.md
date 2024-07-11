@@ -6,7 +6,7 @@ The code is written in python, it implements the [FastAPI](https://fastapi.tiang
 It's possible to test the APIs thanks to [Swagger](https://swagger.io/) very easily by going to the dedicated endpoint (if tested in local it is `localhost:8080/docs`). Moreover, the code includes a dedicated logging system through the dedicated python library `logging` appropriately configured.
 
 All the code is designed to run in a simple Docker container (see the _Dockerfile_), to maintain all the advantages of the microservices architecture, run in a lightweight isolated environment (so other microservices can be added following this architecture) in order to decouple the microservice, and to easily allow its scalability thanks to the cloud architecture.
-Since the code is designed to work correctly with the Docker container, it's better to test it _as is_ with the provided cloud AWS infrastructure [go to inserire link]() or, if you want, you can test it in your local machine by following the __local execution__ steps below by running a Docker container.
+Since the code is designed to work correctly with the Docker container, it's better to test it _as is_ with the provided cloud AWS infrastructure [here the link](http://mcde20-albpr-uiel8gwv2nvn-1021402553.eu-west-1.elb.amazonaws.com/docs) or, if you want, you can test it in your local machine by following the __local execution__ steps below by running a Docker container.
 
 ## Test the code
 
@@ -19,7 +19,7 @@ In order to run this code, you must satisfy these prerequisites:
 ### Test the microservice
 #### Test it in the AWS Cloud Infrastructure
 1. Go to the products microservice endpoint: 
-    - [endpoint]()
+    - [AWS endpoint](http://mcde20-albpr-uiel8gwv2nvn-1021402553.eu-west-1.elb.amazonaws.com/docs)
 2. Test the APIs. You can:
     - List all the items in the products database
     - Search a product through its ID
@@ -157,8 +157,8 @@ Below the required steps to run and test the code locally during the development
     MICROSERVICE_DESCRIPTION="The Products microservice is a self-contained service responsible for managing product data within a larger application. It provides functionalities to create, retrieve, update, and delete product information."                                                
     
     LOGGING_LEVEL=DEBUG         # logging level used in the code for the logging python package
-    DYNAMODB_TABLE=MCDE2023-d-products            
-    DYNAMODB_REGION=<your region> #eg eu-west-1
+    DYNAMODB_TABLE=MCDE2023-products-cf #table name
+    DYNAMODB_REGION=eu-west-1   # your region
 
     AWS_ACCESS_KEY_ID=<your_aws_access_key>
     AWS_SECRET_ACCESS_KEY=<your_aws_secret_access_key>
@@ -223,7 +223,7 @@ The OpenAPI spec can also be generated as `openapi.yaml` through the dedicated p
 
 To generate the OpenAPI spec, please, run in your active virtual environment the following commands:
 ```
-$env:ENVIRONMENT=local
-$env:PYTHONPATH=./app
+$env:ENVIRONMENT="local"
+$env:PYTHONPATH="./app"
 python extract_openapi.py
 ```
