@@ -19,7 +19,7 @@ In order to run this code, you must satisfy these prerequisites:
 ### Test the microservice
 #### Test it in the AWS Cloud Infrastructure
 1. Go to the products microservice endpoint: 
-    - [AWS endpoint](http://mcde20-albpr-uiel8gwv2nvn-1021402553.eu-west-1.elb.amazonaws.com/docs)
+    - [AWS endpoint](http://mcde20-albpr-j7vzwjeahvic-1151209243.eu-west-1.elb.amazonaws.com/docs)
 2. Test the APIs. You can:
     - List all the items in the products database
     - Search a product through its ID
